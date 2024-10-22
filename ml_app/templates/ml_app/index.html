@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Model Prediction</title>
+    <style>
+        body {
+            background-color: #1a1a2e;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: #00aaff;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            text-align: center;
+            text-shadow: 1px 1px #005f99;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            background-color: #16213e;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .form-group input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #3b4a6b;
+            background-color: #0f3460;
+            color: #ffffff;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        input[type="text"]:focus {
+            border: 2px solid #00aaff;
+            outline: none;
+        }
+
+        input[type="radio"] {
+            accent-color: #00aaff;
+            margin-right: 8px;
+        }
+
+        fieldset {
+            border: 1px solid #3b4a6b;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #0f3460;
+            color: #ffffff;
+            width: 100%;
+        }
+
+        fieldset legend {
+            font-weight: bold;
+            font-size: 16px;
+            color: #00aaff;
+        }
+
+        fieldset label {
+            display: block;
+            margin-bottom: 5px;
+            color: #b8c1ec;
+        }
+
+        .submit-btn {
+            align-self: flex-end;
+            background-color: #00aaff;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #005f99;
+        }
+
+        .submit-btn:active {
+            background-color: #003f66;
+        }
+
+        #result {
+            background-color: #00aaff;
+            padding: 20px;
+            color: white;
+            text-align: center;
+            margin-top: 20px;
+            border-radius: 10px;
+            font-size: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .result-label {
+            font-weight: bold;
+            font-size: 20px;
+            margin-right: 20px;
+        }
+
+        .result-value {
+            padding: 10px 20px;
+            background-color: #1a1a2e;
+            border-radius: 5px;
+            font-size: 18px;
+            color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .form-group {
+                flex-direction: column;
+            }
+
+            .submit-btn {
+                align-self: center;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Diabetes Prediction Logistic Regression Model</h1>
+        <form id="prediction-form" method="post" action="/predict">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <input type="text" name="age" placeholder="Age" required>
+                <input type="text" name="hypertension" placeholder="Hypertension" required>
+                <input type="text" name="heart_disease" placeholder="Heart Disease" required>
+            </div>
+
+            <div class="form-group">
+                <fieldset>
+                    <legend>Gender</legend>
+                    <label><input type="radio" name="gender" value="1" required> Male</label>
+                    <label><input type="radio" name="gender" value="2" required> Female</label>
+                    <label><input type="radio" name="gender" value="3" required> Other</label>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Smoking History</legend>
+                    <label><input type="radio" name="smoking_history" value="1" required> Never</label>
+                    <label><input type="radio" name="smoking_history" value="2" required> No Info</label>
+                    <label><input type="radio" name="smoking_history" value="3" required> Current</label>
+                    <label><input type="radio" name="smoking_history" value="4" required> Former</label>
+                    <label><input type="radio" name="smoking_history" value="5" required> Ever</label>
+                    <label><input type="radio" name="smoking_history" value="6" required> Not current</label>
+                </fieldset>
+            </div>
+
+            <div class="form-group">
+                <input type="text" name="bmi" placeholder="BMI" required>
+                <input type="text" name="HbA1c_level" placeholder="HbA1c Level" required>
+                <input type="text" name="blood_glucose_level" placeholder="Blood Glucose Level" required>
+            </div>
+
+            <button class="submit-btn" type="submit">Predict</button>
+        </form>
+
+        <div id="result">
+            <span class="result-label">Result:</span>
+            {% if answer == 1 %}
+            <span class="result-value" style="background-color: #d44562;">Yes</span>
+            {% elif answer == 0 %}
+            <span class="result-value" style="background-color: #84ce3b;">No</span>
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+</html>
